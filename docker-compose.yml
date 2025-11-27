@@ -1,0 +1,59 @@
+services:
+  squad:
+    image: cm2network/squad:latest
+#    build:
+ #     context: ./docker
+  #    dockerfile: Dockerfile
+    container_name: squad
+#    cpuset: "0-3"
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - ./squad-data/:/home/steam/squad-dedicated/
+    env_file:
+      - .env
+    environment:
+      - SERVER_NAME=${SERVER_NAME}
+      - PORT=${PORT}
+      - QUERYPORT=${QUERYPORT}
+      - RCONPORT=${RCONPORT}
+      - FIXEDMAXPLAYERS=${FIXEDMAXPLAYERS}
+      - FIXEDMAXTICKRATE=${FIXEDMAXTICKRATE}
+      - MODS=${MODS}
+
+  sftp:
+    image: atmoz/sftp
+    volumes:
+        - ./squad-data/SquadGame/Saved/Logs:/home/${SFTP_USERNAME}/logdir
+    ports:
+        - "${SFTP_PORT}:22"
+    command: ${SFTP_USERNAME}:${SFTP_PASSWORD}:${SFTP_UID}
+
+  db:
+    image: docker.io/mariadb
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+    volumes:
+      - squadjs-mariadb:/var/lib/mysql
+
+  squadjs:
+    image: ghcr.io/comunidad-hispana-squad/squadjs-docker:latest
+    depends_on:
+      - squad
+#    build:
+ #     context: ./squadjs-docker
+  #    dockerfile: Dockerfile
+    volumes:
+    - squadjs-sqlite:/app/database.sqlite
+    - ./squadjs-config.json:/app/config.json
+    - ./squad-data/SquadGame/ServerConfig/:/app/ServerConfig
+
+volumes:
+  squadjs-sqlite:
+  squadjs-mariadb:
