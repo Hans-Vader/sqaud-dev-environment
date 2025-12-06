@@ -24,7 +24,7 @@ There are two docker-compose.yml files: one for a Squad server with a SFTP to ma
      ```bash
      cp .env.dist .env
      ```
-   - Optionally adjust `squadjs-config.json.dist` and copy it to `squadjs-config.json`:
+   - Copy `squadjs-config.json.dist` to `squadjs-config.json` and adjust the values for your environment:
      ```bash
      cp squadjs-config.json.dist squadjs-config.json
      ```
