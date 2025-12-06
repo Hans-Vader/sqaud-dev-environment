@@ -1,0 +1,28 @@
+services:
+  squad:
+    image: cm2network/squad:latest
+    container_name: squad
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - ./squad-data/:/home/steam/squad-dedicated/
+    env_file:
+      - .env
+    environment:
+      - SERVER_NAME=${SERVER_NAME}
+      - PORT=${PORT}
+      - QUERYPORT=${QUERYPORT}
+      - RCONPORT=${RCONPORT}
+      - FIXEDMAXPLAYERS=${FIXEDMAXPLAYERS}
+      - FIXEDMAXTICKRATE=${FIXEDMAXTICKRATE}
+      - MODS=${MODS}
+
+  sftp:
+    image: atmoz/sftp
+    env_file:
+      - .env
+    volumes:
+      - ./squad-data/SquadGame/Saved/Logs:/home/${SFTP_USERNAME}/logdir
+    ports:
+      - "${SFTP_PORT}:22"
+    command: ${SFTP_USERNAME}:${SFTP_PASSWORD}:${SFTP_UID}
