@@ -13,6 +13,9 @@ There are two docker-compose.yml files: one for a Squad server with a SFTP to ma
 1. **Clone the repository**
    ```bash
    git clone https://github.com/Hans-Vader/squad-dev-environment.git
+   ```
+   
+    ```bash
    cd sqaud-dev-environment
    ```
 
