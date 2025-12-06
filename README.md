@@ -20,6 +20,7 @@ There are two docker-compose.yml files: one for a Squad server with a SFTP to ma
    ```
 
 2. **Adjust configuration files**
+
    Copy `.env.dist` to `.env` and adjust the values for your environment:
      ```bash
      cp .env.dist .env
